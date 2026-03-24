@@ -1,8 +1,11 @@
 const fetch = (...args) => import('node-fetch').then(({default: fetch}) => fetch(...args));
 
-// Read Alpha Vantage API key from standard env var
-const API_KEY = process.env.ALPHA_VANTAGE_API_KEY;
-if (!API_KEY) console.warn('ALPHA_VANTAGE_API_KEY is missing in env');
+// Support both correct and legacy misspelled env keys.
+const API_KEY =
+  process.env.ALPHA_VANTAGE_API_KEY || process.env.ALPHA_VINTAGE_API_KEY;
+if (!API_KEY) {
+  console.warn('Missing Alpha Vantage key. Set ALPHA_VANTAGE_API_KEY in .env');
+}
 
 // Simple in-memory cache with TTL
 const cache = new Map();
@@ -17,6 +20,7 @@ function getCache(key) {
 }
 
 async function getQuote(symbol) {
+  if (!API_KEY) throw new Error('Alpha Vantage API key is not configured');
   const key = `quote:${symbol.toUpperCase()}`;
   const cached = getCache(key);
   if (cached) return cached;
@@ -36,6 +40,7 @@ async function getQuote(symbol) {
 }
 
 async function getDaily(symbol) {
+  if (!API_KEY) throw new Error('Alpha Vantage API key is not configured');
   const key = `daily:${symbol.toUpperCase()}`;
   const cached = getCache(key);
   if (cached) return cached;

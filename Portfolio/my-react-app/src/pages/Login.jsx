@@ -1,5 +1,7 @@
 import { useEffect } from 'react'
 
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL || 'http://localhost:5000'
+
 // Minimal login page with a Google OAuth redirect button
 export default function Login() {
   useEffect(() => {
@@ -8,7 +10,7 @@ export default function Login() {
 
   const handleGoogleLogin = () => {
     // Redirect the browser to the backend OAuth endpoint
-    window.location.href = 'http://localhost:5000/auth/google'
+    window.location.href = `${BACKEND_URL}/auth/google`
   }
 
   return (

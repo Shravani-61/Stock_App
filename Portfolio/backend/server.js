@@ -1,4 +1,5 @@
-require('dotenv').config();
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
 const express = require('express');
 const session = require('express-session');
 const cors = require('cors');
@@ -13,7 +14,10 @@ const app = express();
 
 // CORS: only allow the frontend origin
 const FRONTEND_URL = process.env.FRONTEND_URL || 'http://localhost:5173';
-app.use(cors({ origin: FRONTEND_URL, credentials: true }));
+app.use(cors({ origin: FRONTEND_URL, credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+ }));
 
 app.use(express.json());
 
