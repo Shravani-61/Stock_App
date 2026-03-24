@@ -34,7 +34,9 @@ router.get(
 
       // Redirect back to frontend with token in URL for the app to capture
       const redirectUrl = `${FRONTEND_URL}/login/success?token=${encodeURIComponent(token)}`;
+      console.log("FRONTEND_URL:", FRONTEND_URL);
       return res.redirect(302, redirectUrl);
+
     } catch (err) {
       console.error('JWT issue/redirect error:', err);
       return res.redirect(`${FRONTEND_URL}/login?error=server_error`);
