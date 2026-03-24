@@ -1,24 +1,27 @@
-import { useEffect } from 'react'
-import { useLocation, useNavigate } from 'react-router-dom'
-import { useAuth } from '../state/AuthContext.jsx'
+import { useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 
-// Reads JWT from the redirect URL and stores it, then redirects to /dashboard
 export default function LoginSuccess() {
-  const { setToken } = useAuth()
-  const { search } = useLocation()
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    const params = new URLSearchParams(search)
-    const token = params.get('token')
-    if (token) {
-      setToken(token)
-      // Redirect to portfolio after login (dashboard removed)
-      navigate('/portfolio', { replace: true })
-    } else {
-      navigate('/login', { replace: true })
-    }
-  }, [search, setToken, navigate])
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
 
-  return null
+    console.log("Token:", token); // debug
+
+    if (token) {
+      localStorage.setItem("token", token);
+
+      // small delay ensures React state updates
+      setTimeout(() => {
+        navigate("/portfolio");
+      }, 100);
+    } else {
+      navigate("/login");
+    }
+  }, [location, navigate]);
+
+  return <div>Logging you in...</div>;
 }
